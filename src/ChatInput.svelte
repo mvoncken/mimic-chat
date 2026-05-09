@@ -1,57 +1,24 @@
 <script>
   import OBR from '@owlbear-rodeo/sdk'
-  import { CHAT_CHANNEL } from './channels.js'
-  import { DiceRoller, DiscordRollRenderer } from 'dice-roller-parser'
+  import { LOCAL_MACRO_CHANNEL } from './channels.js'
 
   let { playerName } = $props()
 
   let text = $state('')
 
-  const SESSION_ID = Math.random().toString(36).slice(2)
-  let _seq = 0
-  const roller = new DiceRoller()
-  const renderer = new DiscordRollRenderer()
-
   const history = []
   let historyIndex = -1
 
-  function processDice(msg) {
-    return msg.replace(/\[([^\]]{1,40})\]/g, (match, inner) => {
-      try {
-        const result = roller.roll(inner.trim())
-        const rendered = renderer.render(result)
-        const eqIdx = rendered.lastIndexOf(' = ')
-        const rolls = eqIdx !== -1 ? rendered.slice(0, eqIdx) : rendered
-        const total = eqIdx !== -1 ? rendered.slice(eqIdx + 3) : result.value
-        return `[${inner.trim()}: ${rolls}] = **${total}**`
-      } catch {
-        return match
-      }
-    })
-  }
-
   async function send() {
-    let raw = text.trim()
+    const raw = text.trim()
     if (!raw) return
-    if (raw.startsWith('/r')) {
-      text = ''
-      document.dispatchEvent(new CustomEvent('mimic-info', { detail: { text: 'just type 2d6 etc, no need for ./r' } }))
-      return
-    }
-    if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
-    const msg = processDice(raw)
     history.unshift(raw)
     historyIndex = -1
     text = ''
 
-    const _id = `${SESSION_ID}-${++_seq}`
-    const entry = { sender: playerName, text: msg, _id }
-
     if (OBR.isAvailable) {
-      OBR.broadcast.sendMessage(CHAT_CHANNEL, entry, { destination: 'ALL' })
+      OBR.broadcast.sendMessage(LOCAL_MACRO_CHANNEL, { title: playerName, md: raw }, { destination: 'LOCAL' })
     }
-    // Show locally immediately
-    document.dispatchEvent(new CustomEvent('mimic-chat', { detail: entry }))
   }
 
   function onKeydown(e) {

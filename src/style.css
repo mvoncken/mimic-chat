@@ -162,8 +162,9 @@ body {
     border-top: 1px solid var(--primary-dark);
 }
 
-.chat-bar input {
+.chat-bar > input {
     flex: 1;
+    min-width: 0;
     background: var(--background-default);
     border: 1px solid var(--primary-dark);
     border-radius: 6px;

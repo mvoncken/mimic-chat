@@ -1,18 +1,20 @@
 <script>
   import { onMount, onDestroy, tick } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
-  import { API_CHANNEL, CHAT_CHANNEL } from './channels.js'
+  import { API_CHANNEL, LOCAL_MACRO_CHANNEL } from './channels.js'
   import { subscribeCustomSources } from './extensions-bridge/index.js'
+  import { processDice } from './dice-macros.js'
   import { marked } from 'marked'
 
   marked.use({ breaks: true })
 
   const MAX = 200
-  let entries = $state([{ type: 'info', text: 'You can drag any action to another place, try it with the icon above!' }])
+  const actionIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" style="display:inline;vertical-align:middle;margin:0 2px"><rect x="18" y="22" width="64" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="5"/><polygon points="28,60 18,78 44,60" fill="currentColor"/><rect x="26" y="33" width="28" height="4" rx="2" fill="currentColor" opacity="0.9"/><rect x="26" y="43" width="18" height="4" rx="2" fill="currentColor" opacity="0.6"/></svg>`
+  let entries = $state([{ type: 'info', text: `You can drag any action to another place, try it with the ${actionIcon} icon above!` }])
   let scrollEl = $state(null)
 
   let unsubRoll = null
-  let unsubChat = null
+  let unsubMacro = null
   let unsubCustom = null
   let onLocalRoll = null
   let onLocalChat = null
@@ -54,15 +56,29 @@
     if (!OBR.isAvailable) return
     await new Promise(resolve => OBR.onReady(resolve))
 
+    const role = await OBR.player.getRole()
+
     unsubRoll = OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
+      if (data.gmOnly && role !== 'GM') return
       if (data.md) {
         push({ type: 'md', sender: data.title ?? null, text: data.md })
+      } else if (data.sender) {
+        push({ type: 'chat', sender: data.sender, text: data.text })
       } else {
         push({ type: 'roll', text: formatRollText(data) })
       }
     })
-    unsubChat = OBR.broadcast.onMessage(CHAT_CHANNEL, ({ data }) => {
-      push({ type: 'chat', sender: data.sender, text: data.text })
+
+    unsubMacro = OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
+      let raw = data.md ?? ''
+      if (raw.startsWith('/r')) {
+        OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
+        return
+      }
+      if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
+      const md = processDice(raw)
+      const title = data.title ?? await OBR.player.getName()
+      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md, title }, { destination: 'ALL' })
     })
 
     unsubCustom = await subscribeCustomSources()
@@ -70,7 +86,7 @@
 
   onDestroy(() => {
     unsubRoll?.()
-    unsubChat?.()
+    unsubMacro?.()
     unsubCustom?.()
     if (onLocalRoll) document.removeEventListener('darklings-roll', onLocalRoll)
     if (onLocalChat) document.removeEventListener('mimic-chat', onLocalChat)

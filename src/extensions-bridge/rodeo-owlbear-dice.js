@@ -41,7 +41,7 @@ export async function subscribe() {
 
     const md = processRoll(roll, values)
     if (!md) return
-    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md, gmOnly: false }, { destination: 'ALL' })
   })
 
   return unsub
