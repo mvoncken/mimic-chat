@@ -1,5 +1,5 @@
 <script>
-  import { onMount, tick } from 'svelte'
+  import { onMount, onDestroy, tick } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
   import { API_CHANNEL, LOCAL_MACRO_CHANNEL, HTML_CHANNEL } from './channels.js'
   import { subscribeCustomSources } from './extensions-bridge/index.js'
@@ -48,7 +48,8 @@
       push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null })
     })
 
-    subscribeCustomSources()
+    const unsub = await subscribeCustomSources()
+    onDestroy(unsub)
   })
 </script>
 
