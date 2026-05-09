@@ -113,7 +113,7 @@ OBR.broadcast.sendMessage(
   'com.friendlymimic.mimic-chat/html',
   {
     html:   '<strong>Critical hit!</strong> <em>12 damage.</em>',  // required — raw HTML string
-    title:  'Goblin Slayer',                                        // optional — omit to show no sender
+    title:  'Goblin Slayer',                                        // required — sender name
     origin: 'com.yourext.yourext',                                  // required
     gmOnly: false,                                                   // optional
   },
@@ -126,7 +126,7 @@ OBR.broadcast.sendMessage(
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `html` | `string` | — | **Required.** Raw HTML. Sanitized by [DOMPurify](https://github.com/cure53/DOMPurify) before display. |
-| `title` | `string` | none | Displayed as the sender name. Omit to show no sender. |
+| `title` | `string` | — | **Required.** Displayed as the sender name. |
 | `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension. |
 | `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
 

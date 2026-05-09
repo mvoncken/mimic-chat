@@ -2,8 +2,6 @@
   import OBR from '@owlbear-rodeo/sdk'
   import { LOCAL_MACRO_CHANNEL } from './channels.js'
 
-  let { playerName } = $props()
-
   let text = $state('')
 
   const history = []
@@ -17,7 +15,7 @@
     text = ''
 
     if (OBR.isAvailable) {
-      OBR.broadcast.sendMessage(LOCAL_MACRO_CHANNEL, { title: playerName, md: raw }, { destination: 'LOCAL' })
+      OBR.broadcast.sendMessage(LOCAL_MACRO_CHANNEL, { md: raw }, { destination: 'LOCAL' })
     }
   }
 

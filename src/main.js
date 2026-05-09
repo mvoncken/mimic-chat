@@ -5,15 +5,12 @@ import App from './App.svelte'
 import './style.css'
 
 async function init() {
-  let playerName = 'Player'
-
   if (OBR.isAvailable) {
     await new Promise(resolve => OBR.onReady(resolve))
     themeManager()
-    try { playerName = await OBR.player.getName() } catch {}
   }
 
-  mount(App, { target: document.getElementById('app'), props: { playerName } })
+  mount(App, { target: document.getElementById('app') })
 }
 
 init()
