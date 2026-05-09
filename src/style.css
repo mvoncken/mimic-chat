@@ -84,18 +84,6 @@ body {
     margin-top: -2px;
 }
 
-.log-entry.type-chat {
-    background: var(--background-paper);
-}
-
-.log-entry.type-roll {
-    background: transparent;
-    border-left: 2px solid var(--primary-dark);
-    padding-left: 8px;
-    color: var(--text-secondary);
-    font-size: 0.9em;
-}
-
 .log-entry.type-md {
     background: var(--background-paper);
 }
@@ -112,15 +100,14 @@ body {
 .log-entry .sender {
     font-weight: 600;
     color: var(--primary-main);
+    background: var(--background-default);
     margin-right: 6px;
+    padding: 1px 6px;
+    border-radius: 4px;
 }
 
 .log-entry .text {
     color: var(--text-primary);
-}
-
-.log-entry.type-roll .text {
-    color: var(--text-secondary);
 }
 
 /* Markdown rendering inside chat messages */

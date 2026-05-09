@@ -1,0 +1,287 @@
+/*
+Legacy compatibility
+Some warts are worth it.
+*/
+
+.beyond20-button-roll-damages { display: none !important; }
+.owl20 {
+    --primary-main: #bb99ff;
+    --primary-light: rgb(200, 173, 255);
+    --primary-dark: rgb(130, 107, 178);
+    --secondary-main: #ee99ff;
+    --secondary-light: rgb(241, 173, 255);
+    --secondary-dark: rgb(166, 107, 178);
+    --background-paper: #222639;
+    --background-default: #1e2231;
+    --text-disabled: rgba(255, 255, 255, 0.5);
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --spell-color: var(--primary-light);
+    --spell-color-h: var(--secondary-light);
+    --red: #FF5C5C;
+    --green: #5CFF5C;
+    --green-bg: green;
+    --blue: #5C5CFF;
+    --yellow: #FFFF5C;
+
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+
+    & a {
+        color: var(--spell-color);
+        text-decoration: inherit;
+    }
+    & a:hover {
+        color: var(--spell-color-h);
+    }
+
+    & .beyond20-message {
+        font-family: "Signika", "Roboto", sans-serif;
+        overflow: visible;
+    }
+
+    & .beyond20-header {
+        display: flex;
+        flex-direction: row;
+    }
+    & .beyond20-header .beyond20-character-avatar {
+       display:none;
+    }
+
+    & .beyond20-message details {
+        flex-grow: 1;
+    }
+
+    & .beyond20-message details summary,
+    & .beyond20-title {
+        flex: 1;
+        font-style: normal;
+        line-height: 36px;
+        font-family: "Modesto Condensed", "Roboto Condensed", "Palatino Linotype", serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--spell-color);
+        padding-top: 3px;
+        margin: 0;
+    }
+
+    & .beyond20-message .beyond20-description,
+    & .beyond20-message details table {
+        border: none;
+        width: 100%;
+        padding: 4px;
+        border-spacing: 0;
+        border-collapse: collapse;
+        background-color: initial;
+    }
+
+    & .beyond20-message table td:first-child {
+        font-weight: bold;
+    }
+
+    & .beyond20-roll-cells,
+    & .beyond20-roll-dice-rolls,
+    & .beyond20-dice-roller-content .beyond20-roll-dice {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-bottom: 0.2em;
+        padding: 0;
+    }
+
+    & .beyond20-roll-cell,
+    & .beyond20-roll-die-result {
+        flex: 1 0 auto;
+        margin: 1px;
+        line-height: 24px;
+        text-align: center;
+        background: var(--background-default);
+        border: 1px solid #999;
+        border-radius: 3px;
+        box-shadow: 0 0 2px #fff inset;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    & .beyond20-roll-result,
+    & .beyond20-roller-error {
+        position: relative;
+        overflow: visible;
+        padding: 0px 5px;
+    }
+
+    & .beyond20-tooltip,
+    & .beyond20-message {
+        overflow: visible;
+    }
+
+    & .beyond20-message .message-content {
+        overflow: visible;
+    }
+
+    & .beyond20-total-damage {
+        font-size: 1.05em;
+        font-weight: bold;
+        border-radius: 3px;
+        line-height: 24px;
+        text-align: center;
+        box-shadow: var(--primary-main) 0px 0px 2px inset;
+        background: var(--background-paper);
+        border: 1px solid #999;
+        margin-bottom: 3px;
+    }
+
+    & .beyond20-critical-damage {
+        border-left: 2px solid var(--red);
+        padding-left: 3px;
+    }
+
+    & .beyond20-total-damage.beyond20-critical-damage {
+        border: 1px solid var(--red);
+        border-radius: 3px;
+        margin-bottom: 2px;
+        box-shadow: var(--red) 0px 0px 2px inset;
+        padding: 0px 5px;
+    }
+
+    & .beyond20-healing {
+        font-size: 1.05em;
+        font-weight: bold;
+        border-radius: 3px;
+        line-height: 24px;
+        text-align: center;
+        margin-bottom: 3px;
+        border: 1px solid var(--green-bg);
+        background: rgb(40 255 0 / 10%);
+        box-shadow: 0 0 2px #0b6900c2 inset;
+    }
+
+    & .beyond20-roll-total {
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    & .beyond20-roll-detail-crit {
+        color: var(--green);
+        font-weight: bold;
+    }
+    & .beyond20-roll-detail-fail {
+        color: var(--red);
+        font-weight: bold;
+    }
+    & .beyond20-roll-detail-crit-fail {
+        color: var(--blue);
+        font-weight: bold;
+    }
+    & .beyond20-roll-detail-normal {
+        color: var(--text-primary);
+    }
+    & .beyond20-roll-detail-discarded {
+        color: var(--text-disabled);
+        text-decoration: line-through;
+        opacity: 0.5;
+    }
+
+    & .beyond20-tooltip .beyond20-tooltip-content {
+        display: none;
+        background-color: var(--background-paper);
+        text-align: left;
+        border-radius: 6px;
+        padding: 5px 10px;
+        margin: 10px;
+        width: 90%;
+        border: 2px solid var(--text-secondary);
+        position: absolute;
+        z-index: 1;
+        transition: opacity 2s linear;
+    }
+    & .beyond20-tooltip:hover .beyond20-tooltip-content {
+        display: block;
+        transform: translate(0, -100%);
+        transition: opacity 2s linear;
+        font-size: initial;
+    }
+    & .beyond20-tooltip-content .dice-tooltip {
+        display: block;
+    }
+    & .dice-tooltip .part-header {
+        font-size: initial;
+    }
+    & .dice-roll .dice-formula {
+        margin: 0.3em 0;
+        font-weight: normal;
+    }
+
+    & .dice-formula.beyond20-roll-formula {
+        line-height: 24px;
+        text-align: center;
+        background: var(--background-paper);
+        border: 1px solid var(--text-disabled);
+        border-radius: 3px;
+        box-shadow: 0 0 2px var(--primary-light) inset;
+        margin: 5px 0;
+        font-weight: bold;
+    }
+
+    & .beyond20-roll-dice-formula {
+        text-align: center;
+        font-size: 18px;
+        margin: auto;
+    }
+
+    & .beyond20-dice-roller-content {
+        background: var(--background-paper);
+        border: 1px solid #999;
+        border-radius: 3px;
+        box-shadow: 0 0 2px #fff inset;
+        margin: 5px 0;
+    }
+    & .beyond20-dice-roller-content .beyond20-roll-dice-formula {
+        flex-grow: 1;
+    }
+    & .beyond20-dice-roller-content .beyond20-roll-dice-rolls {
+        flex-grow: 4;
+    }
+    & .beyond20-dice-roller-content .beyond20-roll-formula {
+        background-color: var(--background-paper);
+        text-align: center;
+        width: 100%;
+    }
+
+    & .beyond20-form-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 3px 0;
+    }
+    & .beyond20-form-row > * {
+        flex: 2;
+    }
+
+    & summary {
+        color: var(--spell-color);
+        cursor: pointer;
+    }
+}
+
+.owl20[data-theme="LIGHT"] {
+    --primary-main: #9966ff;
+    --primary-light: rgb(173, 132, 255);
+    --primary-dark: rgb(107, 71, 178);
+    --secondary-main: #dd33ff;
+    --secondary-light: rgb(227, 91, 255);
+    --secondary-dark: rgb(154, 35, 178);
+    --background-paper: #f1f3f9;
+    --background-default: #dde1ee;
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --spell-color: var(--primary-dark);
+    --spell-color-h: var(--primary-light);
+    --red: darkred;
+    --green: darkgreen;
+    --green-bg: lightgreen;
+    --blue: darkblue;
+    --yellow: #D1C000;
+}

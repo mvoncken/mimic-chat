@@ -1,10 +1,11 @@
 <script>
-  import { onMount, onDestroy, tick } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
-  import { API_CHANNEL, LOCAL_MACRO_CHANNEL } from './channels.js'
+  import { API_CHANNEL, LOCAL_MACRO_CHANNEL, HTML_CHANNEL } from './channels.js'
   import { subscribeCustomSources } from './extensions-bridge/index.js'
   import { processDice } from './dice-macros.js'
   import { marked } from 'marked'
+  import DOMPurify from 'dompurify'
 
   marked.use({ breaks: true })
 
@@ -13,99 +14,56 @@
   let entries = $state([{ type: 'info', text: `You can drag any action to another place, try it with the ${actionIcon} icon above!` }])
   let scrollEl = $state(null)
 
-  let unsubRoll = null
-  let unsubMacro = null
-  let unsubCustom = null
-  let onLocalRoll = null
-  let onLocalChat = null
-  let onLocalInfo = null
-
   function push(entry) {
-    entries = [...entries, entry]
-    if (entries.length > MAX) entries = entries.slice(entries.length - MAX)
+    entries = [...entries.slice(-(MAX - 1)), entry] // MAX-1 to make room for the new entry
   }
 
-  function formatRollText(data) {
-    if (data.md) return data.md
-    const who = data.characterName ?? 'Unknown'
-    const desc = data.description ?? data.macro ?? '?'
-    const total = data.total ?? data.rawRoll?.value ?? '?'
-    return `${who}: ${desc} → ${total}`
-  }
-
-  $effect(() => {
-    const _ = entries.length
-    tick().then(() => {
-      if (scrollEl) scrollEl.scrollTop = scrollEl.scrollHeight
-    })
-  })
+  // entries.length read creates the reactive dependency; tick() waits for DOM update
+  $effect(() => { entries.length; tick().then(() => scrollEl && (scrollEl.scrollTop = scrollEl.scrollHeight)) })
 
   onMount(async () => {
-    onLocalRoll = e => {
-      const data = e.detail
-      push({ type: 'roll', text: formatRollText(data) })
-    }
-    onLocalChat = e => {
-      push({ type: 'chat', sender: e.detail.sender, text: e.detail.text })
-    }
-    onLocalInfo = e => push({ type: 'info', text: e.detail.text })
-    document.addEventListener('darklings-roll', onLocalRoll)
-    document.addEventListener('mimic-chat', onLocalChat)
-    document.addEventListener('mimic-info', onLocalInfo)
-
     if (!OBR.isAvailable) return
     await new Promise(resolve => OBR.onReady(resolve))
-
     const role = await OBR.player.getRole()
 
-    unsubRoll = OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
+    OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
       if (data.gmOnly && role !== 'GM') return
-      if (data.md) {
-        push({ type: 'md', sender: data.title ?? null, text: data.md })
-      } else if (data.sender) {
-        push({ type: 'chat', sender: data.sender, text: data.text })
-      } else {
-        push({ type: 'roll', text: formatRollText(data) })
-      }
+      if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md })
     })
 
-    unsubMacro = OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
+    // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL — see API-README.md
+    OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
       let raw = data.md ?? ''
-      if (raw.startsWith('/r')) {
+      if (raw.startsWith('/r')) { // old Roll20/Discord habit; nudge the user
         OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
         return
       }
-      if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
-      const md = processDice(raw)
       const title = data.title ?? await OBR.player.getName()
-      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md, title }, { destination: 'ALL' })
+      if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
+      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md: processDice(raw), title }, { destination: 'ALL' })
     })
 
-    unsubCustom = await subscribeCustomSources()
-  })
+    OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {
+      if (data.gmOnly && role !== 'GM') return
+      push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null })
+    })
 
-  onDestroy(() => {
-    unsubRoll?.()
-    unsubMacro?.()
-    unsubCustom?.()
-    if (onLocalRoll) document.removeEventListener('darklings-roll', onLocalRoll)
-    if (onLocalChat) document.removeEventListener('mimic-chat', onLocalChat)
-    if (onLocalInfo) document.removeEventListener('mimic-info', onLocalInfo)
+    subscribeCustomSources()
   })
 </script>
 
 <div class="mimic-log" bind:this={scrollEl}>
-  {#if entries.length === 0}
-    <p class="log-empty">No messages yet.</p>
-  {:else}
-    {#each entries as entry, i (i)}
-      {@const sameAsPrev = entry.sender && entry.sender === entries[i - 1]?.sender}
-      <div class="log-entry type-{entry.type}" class:continued={sameAsPrev}>
-        {#if entry.sender && !sameAsPrev}
-          <span class="sender">{entry.sender}</span>
-        {/if}
+  {#each entries as entry, i (i)}
+    {@const sameAsPrev = entry.sender && entry.sender === entries[i - 1]?.sender}
+    <div class="log-entry type-{entry.type}" class:continued={sameAsPrev}>
+      {#if entry.sender && !sameAsPrev}
+        <span class="sender">💬 {entry.sender}</span>
+      {/if}
+      {#if entry.type === 'html'}
+        <div class="html-entry {entry.originClass}"><span class="text">{@html entry.text}</span></div>
+      {:else}
         <span class="text markdown">{@html marked(entry.text)}</span>
-      </div>
-    {/each}
-  {/if}
+      {/if}
+    </div>
+  {/each}
 </div>

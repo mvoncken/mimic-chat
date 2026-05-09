@@ -39,7 +39,7 @@
 <div class="chat-bar">
   <input
     type="text"
-    placeholder="Say something..."
+    placeholder="Chat or Roll here"
     bind:value={text}
     onkeydown={onKeydown}
     maxlength="500"

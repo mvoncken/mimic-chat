@@ -4,7 +4,6 @@ import { API_CHANNEL } from '../channels.js'
 const ROLL_KEY = 'rodeo.owlbear.dice/roll'
 const VALUES_KEY = 'rodeo.owlbear.dice/rollValues'
 
-
 export function formatRoll(roll, values) {
   const allDice = roll.dice.flatMap(group => group.dice ?? [group])
   const vals = allDice.map(d => values[d.id])
@@ -16,8 +15,7 @@ export function formatRoll(roll, values) {
 }
 
 export function processRoll(roll, values) {
-  if (roll.hidden) return null
-  return formatRoll(roll, values)
+  return roll.hidden ? null : formatRoll(roll, values)
 }
 
 export async function subscribe() {
@@ -27,22 +25,14 @@ export async function subscribe() {
   const origin = 'bridge::rodeo.owlbear.dice'
   let prevHash = JSON.stringify((await OBR.player.getMetadata())[VALUES_KEY] ?? null)
 
-  const unsub = OBR.player.onChange(player => {
+  return OBR.player.onChange(player => {
     const roll = player.metadata[ROLL_KEY]
     const values = player.metadata[VALUES_KEY]
-    if (!roll || !values) return
-
-    const settled = Object.values(values).every(v => v !== null)
-    if (!settled) return
-
+    if (!roll || !values || roll.hidden) return
+    if (!Object.values(values).every(v => v !== null)) return // null = die still animating
     const hash = JSON.stringify(values)
-    if (hash === prevHash) return
+    if (hash === prevHash) return // onChange fires on every metadata write, not just dice
     prevHash = hash
-
-    const md = processRoll(roll, values)
-    if (!md) return
-    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md, gmOnly: false }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md: formatRoll(roll, values), gmOnly: false }, { destination: 'ALL' })
   })
-
-  return unsub
 }

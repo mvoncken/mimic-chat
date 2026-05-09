@@ -6,8 +6,9 @@ Mimic Chat is an Owlbear Rodeo action panel that displays a shared chat log. Ext
 
 | Channel | Direction | Destination |
 |---|---|---|
-| `com.friendlymimic.mimic-chat/md` | **send to post** | `ALL` (or `LOCAL`) |
+| `com.friendlymimic.mimic-chat/md` | **send to post (preferred)** | `ALL` (or `LOCAL`) |
 | `com.friendlymimic.mimic-chat/md-local-macro` | **send for dice processing → dispatches to `…/md`** | `LOCAL` only |
+| `com.friendlymimic.mimic-chat/html` | **send raw HTML (last resort)** | `ALL` (or `LOCAL`) |
 
 ---
 
@@ -75,6 +76,38 @@ Expressions are evaluated by [dice-roller-parser](https://github.com/BTMorton/di
 
 Lines starting with `/r` trigger a local info message explaining the correct syntax, and are not forwarded.
 
+
+---
+
+## `com.friendlymimic.mimic-chat/html` — Raw HTML channel
+
+**Prefer `…/md` whenever possible.** Use this channel only when Markdown isn't expressive enough.
+
+Incoming `html` is sanitized with [DOMPurify](https://github.com/cure53/DOMPurify) before rendering. Scripts, event handlers, and other dangerous constructs are stripped.
+
+### Message shape
+
+```js
+OBR.broadcast.sendMessage(
+  'com.friendlymimic.mimic-chat/html',
+  {
+    html:   '<strong>Critical hit!</strong> <em>12 damage.</em>',  // required — raw HTML string
+    title:  'Goblin Slayer',                                        // required — sender name
+    origin: 'com.yourext.yourext',                                  // required
+    gmOnly: false,                                                   // optional
+  },
+  { destination: 'ALL' }
+)
+```
+
+### Fields
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `html` | `string` | — | **Required.** Raw HTML. Sanitized by [DOMPurify](https://github.com/cure53/DOMPurify) before display. |
+| `title` | `string` | — | **Required.** Displayed as the sender name. |
+| `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension. |
+| `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
 
 ---
 
