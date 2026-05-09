@@ -1,0 +1,15 @@
+{
+  "name": "Mimic Chat",
+  "version": "0.1.0",
+  "manifest_version": 1,
+  "homepage_url": "https://mimiclog.friendlymimic.com",
+  "icon": "/icon.svg",
+  "description": "Plain-text chat for your table. Also shows dice rolls from ShadowDarklings Roller.",
+  "action": {
+    "title": "Mimic Chat",
+    "icon": "/action-icon.svg",
+    "popover": "/index.html",
+    "height": 450,
+    "width": 350
+  }
+}

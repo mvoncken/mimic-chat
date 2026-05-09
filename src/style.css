@@ -1,0 +1,199 @@
+/* Base palette from owl20-owlbear (dark mode default) */
+:root {
+    --primary-main: #bb99ff;
+    --primary-light: rgb(200, 173, 255);
+    --primary-dark: rgb(130, 107, 178);
+    --secondary-main: #ee99ff;
+    --secondary-light: rgb(241, 173, 255);
+    --background-paper: #222639;
+    --background-default: #1e2231;
+    --text-disabled: rgba(255, 255, 255, 0.5);
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="LIGHT"] {
+    --primary-main: #9966ff;
+    --primary-light: rgb(173, 132, 255);
+    --primary-dark: rgb(107, 71, 178);
+    --secondary-main: #dd33ff;
+    --secondary-light: rgb(227, 91, 255);
+    --background-paper: #f1f3f9;
+    --background-default: #dde1ee;
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--background-default);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Log area */
+.mimic-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mimic-log::-webkit-scrollbar {
+    width: 4px;
+}
+.mimic-log::-webkit-scrollbar-track {
+    background: transparent;
+}
+.mimic-log::-webkit-scrollbar-thumb {
+    background: var(--primary-dark);
+    border-radius: 2px;
+}
+
+.log-entry {
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.log-entry.continued {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: -2px;
+}
+
+.log-entry.type-chat {
+    background: var(--background-paper);
+}
+
+.log-entry.type-roll {
+    background: transparent;
+    border-left: 2px solid var(--primary-dark);
+    padding-left: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.log-entry.type-md {
+    background: var(--background-paper);
+}
+
+.log-entry.type-info {
+    background: transparent;
+    color: var(--text-disabled);
+    font-size: 0.85em;
+    font-style: italic;
+    text-align: center;
+    padding: 8px 4px;
+}
+
+.log-entry .sender {
+    font-weight: 600;
+    color: var(--primary-main);
+    margin-right: 6px;
+}
+
+.log-entry .text {
+    color: var(--text-primary);
+}
+
+.log-entry.type-roll .text {
+    color: var(--text-secondary);
+}
+
+/* Markdown rendering inside chat messages */
+.text.markdown p { margin: 0; }
+.text.markdown p + p { margin-top: 4px; }
+.text.markdown strong { color: var(--primary-light); }
+.text.markdown em { opacity: 0.85; }
+.text.markdown code {
+    background: var(--background-default);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 0.88em;
+    font-family: monospace;
+}
+.text.markdown pre {
+    background: var(--background-default);
+    border-radius: 4px;
+    padding: 6px 8px;
+    margin: 4px 0;
+    overflow-x: auto;
+}
+.text.markdown pre code { background: none; padding: 0; }
+.text.markdown ul, .text.markdown ol { padding-left: 18px; margin: 4px 0; }
+.text.markdown a { color: var(--primary-light); }
+
+.log-empty {
+    color: var(--text-disabled);
+    font-size: 0.85em;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Chat input bar */
+.chat-bar {
+    display: flex;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--background-paper);
+    border-top: 1px solid var(--primary-dark);
+}
+
+.chat-bar input {
+    flex: 1;
+    background: var(--background-default);
+    border: 1px solid var(--primary-dark);
+    border-radius: 6px;
+    color: var(--text-primary);
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.chat-bar input:focus {
+    border-color: var(--primary-main);
+}
+
+.chat-bar input::placeholder {
+    color: var(--text-disabled);
+}
+
+.chat-bar button {
+    background: var(--primary-dark);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.chat-bar button:hover {
+    background: var(--primary-main);
+}
