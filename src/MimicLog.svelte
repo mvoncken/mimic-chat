@@ -2,6 +2,7 @@
   import { onMount, onDestroy, tick } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
   import { API_CHANNEL, CHAT_CHANNEL } from './channels.js'
+  import { subscribeCustomSources } from './extensions-bridge/index.js'
   import { marked } from 'marked'
 
   marked.use({ breaks: true })
@@ -10,18 +11,14 @@
   let entries = $state([{ type: 'info', text: 'You can drag any action to another place, try it with the icon above!' }])
   let scrollEl = $state(null)
 
-  const seenIds = new Set()
   let unsubRoll = null
   let unsubChat = null
+  let unsubCustom = null
   let onLocalRoll = null
   let onLocalChat = null
   let onLocalInfo = null
 
   function push(entry) {
-    if (entry._id) {
-      if (seenIds.has(entry._id)) return
-      seenIds.add(entry._id)
-    }
     entries = [...entries, entry]
     if (entries.length > MAX) entries = entries.slice(entries.length - MAX)
   }
@@ -44,10 +41,10 @@
   onMount(async () => {
     onLocalRoll = e => {
       const data = e.detail
-      push({ type: 'roll', text: formatRollText(data), _id: data._id })
+      push({ type: 'roll', text: formatRollText(data) })
     }
     onLocalChat = e => {
-      push({ type: 'chat', sender: e.detail.sender, text: e.detail.text, _id: e.detail._id })
+      push({ type: 'chat', sender: e.detail.sender, text: e.detail.text })
     }
     onLocalInfo = e => push({ type: 'info', text: e.detail.text })
     document.addEventListener('darklings-roll', onLocalRoll)
@@ -59,19 +56,22 @@
 
     unsubRoll = OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
       if (data.md) {
-        push({ type: 'md', sender: data.title ?? null, text: data.md, _id: data._id })
+        push({ type: 'md', sender: data.title ?? null, text: data.md })
       } else {
-        push({ type: 'roll', text: formatRollText(data), _id: data._id })
+        push({ type: 'roll', text: formatRollText(data) })
       }
     })
     unsubChat = OBR.broadcast.onMessage(CHAT_CHANNEL, ({ data }) => {
-      push({ type: 'chat', sender: data.sender, text: data.text, _id: data._id })
+      push({ type: 'chat', sender: data.sender, text: data.text })
     })
+
+    unsubCustom = await subscribeCustomSources()
   })
 
   onDestroy(() => {
     unsubRoll?.()
     unsubChat?.()
+    unsubCustom?.()
     if (onLocalRoll) document.removeEventListener('darklings-roll', onLocalRoll)
     if (onLocalChat) document.removeEventListener('mimic-chat', onLocalChat)
     if (onLocalInfo) document.removeEventListener('mimic-info', onLocalInfo)
@@ -82,7 +82,7 @@
   {#if entries.length === 0}
     <p class="log-empty">No messages yet.</p>
   {:else}
-    {#each entries as entry, i (entry._id ?? entry)}
+    {#each entries as entry, i (i)}
       {@const sameAsPrev = entry.sender && entry.sender === entries[i - 1]?.sender}
       <div class="log-entry type-{entry.type}" class:continued={sameAsPrev}>
         {#if entry.sender && !sameAsPrev}
