@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy, tick } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
-  import { API_CHANNEL, LOCAL_MACRO_CHANNEL, HTML_CHANNEL } from './channels.js'
+  import { API_CHANNEL, LOCAL_MACRO_CHANNEL, LOCAL_CHANNEL, HTML_CHANNEL } from './channels.js'
   import { subscribeCustomSources } from './extensions-bridge/index.js'
   import { processDice } from './dice-macros.js'
   import { marked } from 'marked'
@@ -41,6 +41,11 @@
       const title = data.title ?? await OBR.player.getName()
       if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
       OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md: processDice(raw), title }, { destination: 'ALL' })
+    })
+
+    OBR.broadcast.onMessage(LOCAL_CHANNEL, async ({ data }) => {
+      const title = data.title || await OBR.player.getName()
+      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, title }, { destination: 'ALL' })
     })
 
     OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {

@@ -7,6 +7,7 @@ Mimic Chat is an Owlbear Rodeo action panel that displays a shared chat log. Ext
 | Channel | Direction | Destination |
 |---|---|---|
 | `com.friendlymimic.mimic-chat/md` | **send to post (preferred)** | `ALL` (or `LOCAL`) |
+| `com.friendlymimic.mimic-chat/md-local` | **send with auto player name → dispatches to `…/md`** | `LOCAL` only |
 | `com.friendlymimic.mimic-chat/md-local-macro` | **send for dice processing → dispatches to `…/md`** | `LOCAL` only |
 | `com.friendlymimic.mimic-chat/html` | **send raw HTML (last resort)** | `ALL` (or `LOCAL`) |
 
@@ -23,7 +24,7 @@ OBR.broadcast.sendMessage(
   'com.friendlymimic.mimic-chat/md',
   {
     md:     'You hit for **12** damage.',  // required — Markdown string
-    title:  'Goblin Slayer',              // required — shown as sender name
+    title:  'Goblin Slayer',              // optional — omit to show no sender
     origin: 'com.yourext.yourext',        // required — identifies your extension
     gmOnly: false,                        // optional — if true, only the GM sees it
   },
@@ -36,13 +37,33 @@ OBR.broadcast.sendMessage(
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `md` | `string` | — | **Required.** Markdown content. Rendered with [marked](https://marked.js.org). |
-| `title` | `string` | — | **Required.** Displayed as the sender name above the message. |
+| `title` | `string` | none | Displayed as the sender name above the message. Omit to show no sender. |
 | `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension (e.g. `com.yourext.yourext`). Not displayed; used for debugging and future filtering. |
 | `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
 
 ### Markdown support
 
 Standard CommonMark plus **bold**, *italic*, `code`, lists, and links. Line breaks are enabled by default.
+
+---
+
+## `com.friendlymimic.mimic-chat/md-local` — Local player name channel
+
+Send a Markdown message here without specifying a `title`. Mimic Chat will fill in the local OBR player name automatically and forward the message to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. No macro or dice processing is applied. **Must use `destination: 'LOCAL'`.**
+
+### Message shape
+
+```js
+OBR.broadcast.sendMessage(
+  'com.friendlymimic.mimic-chat/md-local',
+  {
+    md:     'I move to the door.',   // required — Markdown string
+    origin: 'com.yourext.yourext',  // required — identifies your extension
+    title:  'Override Name',        // optional — omit to use the local player's name
+  },
+  { destination: 'LOCAL' }
+)
+```
 
 ---
 
@@ -57,7 +78,7 @@ OBR.broadcast.sendMessage(
   'com.friendlymimic.mimic-chat/md-local-macro',
   {
     md:     'I attack for [1d8+3] damage.',  // required — raw text with optional dice macros
-    title:  'Fighter',                       // required — sender name (defaults to OBR player name if omitted)
+    title:  'Fighter',                       // optional — defaults to local player name
     origin: 'com.yourext.yourext',           // required — identifies your extension
   },
   { destination: 'LOCAL' }
@@ -92,7 +113,7 @@ OBR.broadcast.sendMessage(
   'com.friendlymimic.mimic-chat/html',
   {
     html:   '<strong>Critical hit!</strong> <em>12 damage.</em>',  // required — raw HTML string
-    title:  'Goblin Slayer',                                        // required — sender name
+    title:  'Goblin Slayer',                                        // optional — omit to show no sender
     origin: 'com.yourext.yourext',                                  // required
     gmOnly: false,                                                   // optional
   },
@@ -105,7 +126,7 @@ OBR.broadcast.sendMessage(
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `html` | `string` | — | **Required.** Raw HTML. Sanitized by [DOMPurify](https://github.com/cure53/DOMPurify) before display. |
-| `title` | `string` | — | **Required.** Displayed as the sender name. |
+| `title` | `string` | none | Displayed as the sender name. Omit to show no sender. |
 | `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension. |
 | `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
 
