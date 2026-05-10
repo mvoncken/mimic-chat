@@ -24,6 +24,6 @@ export async function subscribe() {
     if (entry.created === prevCreated) return
     prevCreated = entry.created
     const msg = processChat(entry)
-    OBR.broadcast.sendMessage(API_CHANNEL, { origin, ...msg, gmOnly: false }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(API_CHANNEL, { origin, ...msg, gmOnly: false, id: `${player.id}::${entry.created}` }, { destination: 'ALL' })
   })
 }

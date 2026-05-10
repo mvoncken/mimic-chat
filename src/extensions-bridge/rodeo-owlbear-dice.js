@@ -33,6 +33,6 @@ export async function subscribe() {
     const hash = JSON.stringify(values)
     if (hash === prevHash) return // onChange fires on every metadata write, not just dice
     prevHash = hash
-    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md: formatRoll(roll, values), gmOnly: false }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md: formatRoll(roll, values), gmOnly: false, id: `${player.id}::${hash}` }, { destination: 'ALL' })
   })
 }

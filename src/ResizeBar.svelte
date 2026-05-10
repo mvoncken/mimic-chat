@@ -71,7 +71,6 @@
     align-items: center;
     gap: 4px;
     padding: 2px 6px;
-    background: var(--background-paper);
     border-bottom: 1px solid var(--primary-dark);
   }
 

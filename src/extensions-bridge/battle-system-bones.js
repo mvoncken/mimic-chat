@@ -25,6 +25,6 @@ export async function subscribe() {
     if (roll.created === prevCreated) return
     prevCreated = roll.created
     const msg = processLogroll(roll)
-    OBR.broadcast.sendMessage(HTML_CHANNEL, { origin, ...msg }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(HTML_CHANNEL, { origin, ...msg, id: `${player.id}::${roll.created}` }, { destination: 'ALL' })
   })
 }

@@ -27,6 +27,7 @@ OBR.broadcast.sendMessage(
     title:  'Goblin Slayer',              // required — sender name
     origin: 'com.yourext.yourext',        // required — identifies your extension
     gmOnly: false,                        // optional — if true, only the GM sees it
+    id:     'myext-action-42',            // optional — deduplication key
   },
   { destination: 'ALL' }
 )
@@ -40,6 +41,7 @@ OBR.broadcast.sendMessage(
 | `title` | `string` | — | **Required.** Displayed as the sender name above the message. |
 | `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension (e.g. `com.yourext.yourext`). Not displayed; used for debugging and future filtering. |
 | `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
+| `id` | `string` | — | Optional deduplication key. If the same `id` is received more than once (e.g. because the extension has multiple layers and fires on each), only the first is shown. Omit when the message originates from a direct UI interaction — those don't duplicate. |
 
 ### Markdown support
 
@@ -116,6 +118,7 @@ OBR.broadcast.sendMessage(
     title:  'Goblin Slayer',                                        // required — sender name
     origin: 'com.yourext.yourext',                                  // required
     gmOnly: false,                                                   // optional
+    id:     'myext-action-42',                                      // optional — deduplication key
   },
   { destination: 'ALL' }
 )
@@ -126,9 +129,9 @@ OBR.broadcast.sendMessage(
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `html` | `string` | — | **Required.** Raw HTML. Sanitized by [DOMPurify](https://github.com/cure53/DOMPurify) before display. |
-| `title` | `string` | — | **Required.** Displayed as the sender name. |
-| `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension. |
-| `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
+| `md` | — | — | Ignored. |
+
+All other fields (`title`, `origin`, `gmOnly`, `id`) behave identically to the `…/md` channel.
 
 ---
 
