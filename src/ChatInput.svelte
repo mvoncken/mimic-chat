@@ -3,7 +3,6 @@
   import { LOCAL_MACRO_CHANNEL } from './channels.js'
 
   let text = $state('')
-
   const history = []
   let historyIndex = -1
 

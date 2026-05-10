@@ -24,7 +24,7 @@ OBR.broadcast.sendMessage(
   'com.friendlymimic.mimic-chat/md',
   {
     md:     'You hit for **12** damage.',  // required — Markdown string
-    title:  'Goblin Slayer',              // optional — omit to show no sender
+    title:  'Goblin Slayer',              // required — sender name
     origin: 'com.yourext.yourext',        // required — identifies your extension
     gmOnly: false,                        // optional — if true, only the GM sees it
   },
@@ -37,7 +37,7 @@ OBR.broadcast.sendMessage(
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `md` | `string` | — | **Required.** Markdown content. Rendered with [marked](https://marked.js.org). |
-| `title` | `string` | none | Displayed as the sender name above the message. Omit to show no sender. |
+| `title` | `string` | — | **Required.** Displayed as the sender name above the message. |
 | `origin` | `string` | — | **Required.** Reverse-domain identifier for your extension (e.g. `com.yourext.yourext`). Not displayed; used for debugging and future filtering. |
 | `gmOnly` | `boolean` | `false` | When `true`, non-GM players silently drop the message. |
 
