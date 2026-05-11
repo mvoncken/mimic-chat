@@ -70,8 +70,6 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 6px;
-    border-bottom: 1px solid var(--primary-dark);
   }
 
   .resize-toggle {

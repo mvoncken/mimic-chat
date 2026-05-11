@@ -49,6 +49,24 @@ body {
     height: 100vh;
 }
 
+.title-bar {
+    display: flex;
+    align-items: center;
+    padding: 0 6px 0 10px;
+    height: 32px;
+    background: var(--background-paper);
+    border-bottom: 1px solid var(--primary-dark);
+    flex-shrink: 0;
+}
+
+.title-bar__name {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+}
+
 /* Log area */
 .mimic-log {
     flex: 1;
