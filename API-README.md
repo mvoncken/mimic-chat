@@ -2,6 +2,22 @@
 
 Mimic Chat is an Owlbear Rodeo action panel that displays a shared chat log. External extensions can post messages into it using OBR's broadcast API.
 
+## Minimal example
+
+```js
+import OBR from '@owlbear-rodeo/sdk'
+
+await OBR.onReady(() => {
+  OBR.broadcast.sendMessage(
+    'com.friendlymimic.mimic-chat/md',
+    { md: 'The dungeon rumbles...', title: 'DM' },
+    { destination: 'ALL' }
+  )
+})
+```
+
+---
+
 ## Channels
 
 | Channel | Direction | Destination |
@@ -71,7 +87,7 @@ OBR.broadcast.sendMessage(
 
 ## `com.friendlymimic.mimic-chat/md-local-macro` — Local macro channel
 
-Send raw text here for dice macro processing. Mimic Chat will roll any `[…]` expressions and forward the result to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. **Must use `destination: 'LOCAL'`** — this channel is not intended for cross-player use.
+Send raw text here for dice macro processing. Mimic Chat will roll any `[…]` expressions and forward the result to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. **Must use `destination: 'LOCAL'`.**
 
 ### Message shape
 
@@ -98,7 +114,6 @@ Expressions are evaluated by [dice-roller-parser](https://github.com/BTMorton/di
 | A bare expression with no spaces (e.g. `2d6`) | auto-wrapped to `[2d6]` |
 
 Lines starting with `/r` trigger a local info message explaining the correct syntax, and are not forwarded.
-
 
 ---
 
@@ -135,22 +150,6 @@ All other fields (`title`, `origin`, `gmOnly`, `id`) behave identically to the `
 
 ---
 
-## Built-in bridge: Owlbear Dice
+## Built-in bridges
 
-Mimic Chat automatically listens to the Owlbear Rodeo dice extension (`rodeo.owlbear.dice`). Rolls appear in the log as the player who rolled them. Hidden rolls (`hidden: true` in the dice metadata) are suppressed.
-
----
-
-## Minimal example
-
-```js
-import OBR from '@owlbear-rodeo/sdk'
-
-await OBR.onReady(() => {
-  OBR.broadcast.sendMessage(
-    'com.friendlymimic.mimic-chat/md',
-    { md: 'The dungeon rumbles...', title: 'DM' },
-    { destination: 'ALL' }
-  )
-})
-```
+Mimic Chat automatically bridges several third-party extensions into the log. See [`src/extensions-bridge/`](src/extensions-bridge/) for the full list and implementation details.
