@@ -63,6 +63,7 @@ OBR.broadcast.sendMessage(
 
 Standard CommonMark plus **bold**, *italic*, `code`, lists, and links. Line breaks are enabled by default.
 
+
 ---
 
 ## `com.friendlymimic.mimic-chat/md-local` — Local player name channel
@@ -114,6 +115,10 @@ Expressions are evaluated by [dice-roller-parser](https://github.com/BTMorton/di
 | A bare expression with no spaces (e.g. `2d6`) | auto-wrapped to `[2d6]` |
 
 Lines starting with `/r` trigger a local info message explaining the correct syntax, and are not forwarded.
+
+### Image URLs
+
+Bare image URLs (ending in `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, or `.svg`) in the `md` string are automatically rendered as full-width inline images. Clicking opens the original URL in a new tab. Messages sent directly to `…/md` are rendered as plain Markdown — use standard Markdown image syntax (`![alt](url)`) there.
 
 ---
 

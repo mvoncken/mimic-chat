@@ -3,7 +3,7 @@
   import OBR from '@owlbear-rodeo/sdk'
   import { API_CHANNEL, LOCAL_MACRO_CHANNEL, LOCAL_CHANNEL, HTML_CHANNEL } from './channels.js'
   import { subscribeCustomSources } from './extensions-bridge/index.js'
-  import { processDice } from './dice-macros.js'
+  import { processDice, injectImages } from './local-macro.js'
   import { marked } from 'marked'
   import DOMPurify from 'dompurify'
 
@@ -30,7 +30,7 @@
 
     OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
       if (data.gmOnly && role !== 'GM') return
-      if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md }, data.id)
+      if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md, gmOnly: !!data.gmOnly }, data.id)
     })
 
     // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL — see API-README.md
@@ -42,7 +42,7 @@
       }
       const title = data.title ?? await OBR.player.getName()
       if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
-      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md: processDice(raw), title }, { destination: 'ALL' })
+      OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md: injectImages(processDice(raw)), title }, { destination: 'ALL' })
     })
 
     OBR.broadcast.onMessage(LOCAL_CHANNEL, async ({ data }) => {
@@ -52,7 +52,7 @@
 
     OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {
       if (data.gmOnly && role !== 'GM') return
-      push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null }, data.id)
+      push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null, gmOnly: !!data.gmOnly }, data.id)
     })
 
     const unsub = await subscribeCustomSources()
@@ -62,15 +62,19 @@
 
 <div class="mimic-log" bind:this={scrollEl}>
   {#each entries as entry, i (i)}
-    {@const sameAsPrev = entry.sender && entry.sender === entries[i - 1]?.sender}
-    <div class="log-entry type-{entry.type}" class:continued={sameAsPrev}>
-      {#if entry.sender && !sameAsPrev}
-        <span class="sender">💬 {entry.sender}</span>
+    <div class="log-entry type-{entry.type}">
+      {#if entry.gmOnly}
+        <span class="gm-only-wrap" title="GM only">
+          <svg class="gm-only-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </span>
       {/if}
       {#if entry.type === 'html'}
+        {#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}
         <div class="html-entry {entry.originClass}"><span class="text">{@html entry.text}</span></div>
       {:else}
-        <span class="text markdown">{@html marked(entry.text)}</span>
+        {#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}<span class="text markdown">{@html marked.parseInline(entry.text)}</span>
       {/if}
     </div>
   {/each}

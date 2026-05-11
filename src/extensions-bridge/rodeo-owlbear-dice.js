@@ -28,11 +28,11 @@ export async function subscribe() {
   return OBR.player.onChange(player => {
     const roll = player.metadata[ROLL_KEY]
     const values = player.metadata[VALUES_KEY]
-    if (!roll || !values || roll.hidden) return
+    if (!roll || !values) return
     if (!Object.values(values).every(v => v !== null)) return // null = die still animating
     const hash = JSON.stringify(values)
     if (hash === prevHash) return // onChange fires on every metadata write, not just dice
     prevHash = hash
-    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md: formatRoll(roll, values), gmOnly: false, id: `${player.id}::${hash}` }, { destination: 'ALL' })
+    OBR.broadcast.sendMessage(API_CHANNEL, { origin, title: player.name, md: formatRoll(roll, values), gmOnly: !!roll.hidden, id: `${player.id}::${hash}` }, { destination: 'ALL' })
   })
 }

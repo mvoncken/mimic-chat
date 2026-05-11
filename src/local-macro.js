@@ -17,3 +17,9 @@ export function processDice(msg) {
     }
   })
 }
+
+const IMAGE_URL_RE = /https?:\/\/\S+\.(?:png|jpe?g|gif|webp|svg)(?:\?\S*)?(?=\s|$)/gi
+
+export function injectImages(text) {
+  return text.replace(IMAGE_URL_RE, url => `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${url}" alt=""></a>`)
+}
