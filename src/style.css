@@ -49,6 +49,9 @@ body {
     height: 100vh;
 }
 
+.pane { display: contents; }
+.pane.hidden { display: none; }
+
 .title-bar {
     display: flex;
     align-items: center;

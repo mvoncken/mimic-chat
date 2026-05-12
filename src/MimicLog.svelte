@@ -6,18 +6,24 @@
   import { processDice, injectImages } from './local-macro.js'
   import { marked } from 'marked'
   import DOMPurify from 'dompurify'
+  import { settings } from './settings.svelte.js'
 
   marked.use({ breaks: true })
 
   const MAX = 200
   const seen = new Set()
   const actionIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" style="display:inline;vertical-align:middle;margin:0 2px"><rect x="18" y="22" width="64" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="5"/><polygon points="28,60 18,78 44,60" fill="currentColor"/><rect x="26" y="33" width="28" height="4" rx="2" fill="currentColor" opacity="0.9"/><rect x="26" y="43" width="18" height="4" rx="2" fill="currentColor" opacity="0.6"/></svg>`
-  let entries = $state([{ type: 'info', text: `You can drag any action to another place, try it with the ${actionIcon} icon above!` }])
+  const defaultIntro = `You can drag any action to another place, try it with the ${actionIcon} icon above!`
+  let entries = $state([{ type: 'info', text: settings.introText || defaultIntro }])
   let scrollEl = $state(null)
 
   function push(entry, id) {
     if (id) { if (seen.has(id)) return; seen.add(id) }
     entries = [...entries.slice(-(MAX - 1)), entry]
+    if (OBR.isAvailable) {
+      OBR.action.setIcon('/action-icon-notify.svg')
+      setTimeout(() => OBR.action.setIcon('/action-icon.svg'), 500)
+    }
   }
 
   // entries.length read creates the reactive dependency; tick() waits for DOM update

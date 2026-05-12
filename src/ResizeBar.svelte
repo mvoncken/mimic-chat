@@ -1,4 +1,3 @@
-<!-- temp disabled -->
 <script>
   import { onMount } from 'svelte'
   import OBR from '@owlbear-rodeo/sdk'
@@ -16,14 +15,22 @@
   let { expanded = $bindable(false) } = $props()
 
   onMount(async () => {
-    if (!OBR.isAvailable) return
-    if (_width === null) {
-      const savedW = parseInt(localStorage.getItem('resize:width') ?? '0')
-      _width = snap(savedW || (await OBR.action.getWidth()) || 400, MIN_W, MAX_W)
-      const h = await OBR.action.getHeight()
-      const savedH = parseInt(localStorage.getItem('resize:height') ?? '0')
-      _height = (h !== undefined) ? snap(savedH || h, MIN_H, MAX_H) : null
+    const savedW = parseInt(localStorage.getItem('resize:width') ?? '0')
+    const savedH = parseInt(localStorage.getItem('resize:height') ?? '0')
+
+    if (OBR.isAvailable) {
+      await new Promise(resolve => OBR.onReady(resolve))
+      const obrW = await OBR.action.getWidth()
+      const obrH = await OBR.action.getHeight()
+      _width = snap(savedW || obrW || 400, MIN_W, MAX_W)
+      _height = obrH !== undefined ? snap(savedH || obrH, MIN_H, MAX_H) : null
+      OBR.action.setWidth(_width)
+      if (_height !== null) OBR.action.setHeight(_height)
+    } else {
+      _width = savedW ? snap(savedW, MIN_W, MAX_W) : 400
+      _height = savedH ? snap(savedH, MIN_H, MAX_H) : null
     }
+
     width = _width
     height = _height
     ready = true
