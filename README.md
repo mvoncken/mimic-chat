@@ -4,7 +4,9 @@ A chat and dice log extension for [Owlbear Rodeo](https://owlbear.rodeo).
 
 ## Why it exists
 
-Owlbear Rodeo has no built-in persistent chat. Mimic Log&Chat fills that gap: a shared log that lives inside your OBR session, visible to everyone at the table, without leaving the game interface.
+Roll20 and Foundry have a built-in chat panel that extensions publish dice rolls and events to. Owlbear Rodeo has no equivalent.
+
+Mimic Log&Chat fills that gap — primarily as a **dice log**, secondarily as a chat. Your default dice rolls will appear here automatically.
 
 ## Features
 
@@ -31,3 +33,9 @@ https://mimiclog.friendlymimic.com/manifest.json
 ## Quick reference
 
 Type `/h` in the chat input for an in-app help summary.
+
+## Links
+
+- [About / documentation](https://mimiclog.friendlymimic.com/about.html)
+- [GitHub](https://github.com/mvoncken/mimic-chat)
+- [Developer API](API-README.md)

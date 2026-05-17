@@ -40,16 +40,16 @@
       if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md, gmOnly: !!data.gmOnly }, data.id)
     }))
 
-    // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL — see API-README.md
+    // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL ::see API-README.md
     unsubs.push(OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
       let raw = data.md ?? ''
       if (raw === '/h') {
         OBR.broadcast.sendMessage(API_CHANNEL, { title: 'Mimic help', origin: 'com.friendlymimic.mimic-chat', md:
-`---\n**Dice inline** — wrap in \`[]\`: \`[2d6]\` \`[2d6+3]\` \`[2d20kh1+5]\`\n**Dice shortcut** — line starting with a number, no spaces: \`2d6\` → rolls immediately\n**Markdown** — \`**bold**\` \`*italic*\` \`\`code\`\`\` \`# Heading\`\n**Images** — paste a direct image URL (png/jpg/gif/webp/svg)\n**Multiline** — Shift+Enter\n**History** — Arrow Up / Down\n<a href="/about.html" target="_blank" rel="noopener noreferrer">Full documentation</a>\n---` }, { destination: 'LOCAL' })
+`---\n**Dice inline** :: wrap in \`[]\`: \`[2d6]\` \`[2d6+3]\` \`[2d20kh1+5]\`\n**Dice shortcut** :: line starting with a number, no spaces: \`2d6\` → rolls immediately\n**Markdown** :: \`**bold**\` \`*italic*\` \`\`code\`\`\` \`# Heading\`\n**Images** :: paste a direct image URL (png/jpg/gif/webp/svg)\n**Multiline** :: Shift+Enter\n**History** :: Arrow Up / Down\n<a href="/about.html" target="_blank" rel="noopener noreferrer">Full documentation</a>\n---` }, { destination: 'LOCAL' })
         return
       }
       if (raw.startsWith('/r')) { // old Roll20/Discord habit; nudge the user
-        OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Log&Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
+        OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc ::no `/r` needed.', title: 'Mimic Log&Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
         return
       }
       const title = data.title ?? await OBR.player.getName()
