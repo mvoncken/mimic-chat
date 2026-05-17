@@ -160,6 +160,10 @@ body {
 /* Markdown rendering inside chat messages */
 .text.markdown p { margin: 0; }
 .text.markdown p + p { margin-top: 4px; }
+.text.markdown h1, .text.markdown h2, .text.markdown h3,
+.text.markdown h4, .text.markdown h5, .text.markdown h6 { margin: 4px 0 2px; font-size: 1em; font-weight: 700; }
+.text.markdown h1 { font-size: 1.2em; }
+.text.markdown h2 { font-size: 1.1em; }
 .text.markdown strong { color: var(--primary-light); }
 .text.markdown em { opacity: 0.85; }
 .text.markdown code {
@@ -196,7 +200,8 @@ body {
     border-top: 1px solid var(--primary-dark);
 }
 
-.chat-bar > input {
+.chat-bar > input,
+.chat-bar > textarea {
     flex: 1;
     min-width: 0;
     background: var(--background-default);
@@ -209,11 +214,13 @@ body {
     outline: none;
 }
 
-.chat-bar input:focus {
+.chat-bar input:focus,
+.chat-bar textarea:focus {
     border-color: var(--primary-main);
 }
 
-.chat-bar input::placeholder {
+.chat-bar input::placeholder,
+.chat-bar textarea::placeholder {
     color: var(--text-disabled);
 }
 

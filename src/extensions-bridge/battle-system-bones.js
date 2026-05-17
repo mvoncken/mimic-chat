@@ -13,7 +13,6 @@ export function processLogroll(roll) {
 }
 
 export async function subscribe() {
-  if (!OBR.isAvailable) return () => {}
   await new Promise(resolve => OBR.onReady(resolve))
 
   const origin = 'bridge::com.battle-system.bones'

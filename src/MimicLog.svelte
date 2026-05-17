@@ -34,14 +34,20 @@
     await new Promise(resolve => OBR.onReady(resolve))
     const role = await OBR.player.getRole()
 
-    OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
+    const unsubs = []
+    unsubs.push(OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
       if (data.gmOnly && role !== 'GM') return
       if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md, gmOnly: !!data.gmOnly }, data.id)
-    })
+    }))
 
     // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL — see API-README.md
-    OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
+    unsubs.push(OBR.broadcast.onMessage(LOCAL_MACRO_CHANNEL, async ({ data }) => {
       let raw = data.md ?? ''
+      if (raw === '/h') {
+        OBR.broadcast.sendMessage(API_CHANNEL, { title: 'Mimic help', origin: 'com.friendlymimic.mimic-chat', md:
+`**Dice inline** — wrap anywhere in text: \`[2d6]\` \`[2d6+3]\` \`[fire: 1d6]\`\n**Dice shortcut** — line starting with a number, no spaces: \`2d6\` → rolls immediately\n**Markdown** — \`**bold**\` \`*italic*\` \`\`code\`\`\` \`# Heading\`\n**Multiline** — Shift+Enter\n**History** — Arrow Up / Down` }, { destination: 'LOCAL' })
+        return
+      }
       if (raw.startsWith('/r')) { // old Roll20/Discord habit; nudge the user
         OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
         return
@@ -49,20 +55,20 @@
       const title = data.title ?? await OBR.player.getName()
       if (/^\d/.test(raw) && !raw.includes(' ')) raw = `[${raw}]`
       OBR.broadcast.sendMessage(API_CHANNEL, { ...data, md: injectImages(processDice(raw)), title }, { destination: 'ALL' })
-    })
+    }))
 
-    OBR.broadcast.onMessage(LOCAL_CHANNEL, async ({ data }) => {
+    unsubs.push(OBR.broadcast.onMessage(LOCAL_CHANNEL, async ({ data }) => {
       const title = data.title || await OBR.player.getName()
       OBR.broadcast.sendMessage(API_CHANNEL, { ...data, title }, { destination: 'ALL' })
-    })
+    }))
 
-    OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {
+    unsubs.push(OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {
       if (data.gmOnly && role !== 'GM') return
       push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null, gmOnly: !!data.gmOnly }, data.id)
-    })
+    }))
 
-    const unsub = await subscribeCustomSources()
-    onDestroy(unsub)
+    unsubs.push(await subscribeCustomSources())
+    onDestroy(() => unsubs.forEach(u => u()))
   })
 </script>
 
@@ -80,7 +86,7 @@
         {#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}
         <div class="html-entry {entry.originClass}"><span class="text">{@html entry.text}</span></div>
       {:else}
-        {#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}<span class="text markdown">{@html marked.parseInline(entry.text)}</span>
+        <div class="text markdown">{#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}{@html marked.parse(entry.text)}</div>
       {/if}
     </div>
   {/each}
