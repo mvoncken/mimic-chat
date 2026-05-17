@@ -1,10 +1,10 @@
-# Mimic Chat&Log
+# Mimic Log&Chat
 
 A chat and dice log extension for [Owlbear Rodeo](https://owlbear.rodeo).
 
 ## Why it exists
 
-Owlbear Rodeo has no built-in persistent chat. Mimic Chat&Log fills that gap: a shared log that lives inside your OBR session, visible to everyone at the table, without leaving the game interface.
+Owlbear Rodeo has no built-in persistent chat. Mimic Log&Chat fills that gap: a shared log that lives inside your OBR session, visible to everyone at the table, without leaving the game interface.
 
 ## Features
 

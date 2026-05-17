@@ -1,6 +1,6 @@
-# Mimic Chat — External Developer API
+# Mimic Log&Chat — External Developer API
 
-Mimic Chat is an Owlbear Rodeo action panel that displays a shared chat log. External extensions can post messages into it using OBR's broadcast API.
+Mimic Log&Chat is an Owlbear Rodeo action panel that displays a shared chat log. External extensions can post messages into it using OBR's broadcast API.
 
 ## Minimal example
 
@@ -68,7 +68,7 @@ Full CommonMark block and inline rendering via [marked](https://marked.js.org) w
 
 ## `com.friendlymimic.mimic-chat/md-local` — Local player name channel
 
-Send a Markdown message here without specifying a `title`. Mimic Chat will fill in the local OBR player name automatically and forward the message to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. No macro or dice processing is applied. **Must use `destination: 'LOCAL'`.**
+Send a Markdown message here without specifying a `title`. Mimic Log&Chat will fill in the local OBR player name automatically and forward the message to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. No macro or dice processing is applied. **Must use `destination: 'LOCAL'`.**
 
 ### Message shape
 
@@ -88,7 +88,7 @@ OBR.broadcast.sendMessage(
 
 ## `com.friendlymimic.mimic-chat/md-local-macro` — Local macro channel
 
-Send raw text here for dice macro processing. Mimic Chat will roll any `[…]` expressions and forward the result to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. **Must use `destination: 'LOCAL'`.**
+Send raw text here for dice macro processing. Mimic Log&Chat will roll any `[…]` expressions and forward the result to `com.friendlymimic.mimic-chat/md` with `destination: 'ALL'`. **Must use `destination: 'LOCAL'`.**
 
 ### Message shape
 
@@ -157,4 +157,4 @@ All other fields (`title`, `origin`, `gmOnly`, `id`) behave identically to the `
 
 ## Built-in bridges
 
-Mimic Chat automatically bridges several third-party extensions into the log. See [`src/extensions-bridge/`](src/extensions-bridge/) for the full list and implementation details.
+Mimic Log&Chat automatically bridges several third-party extensions into the log. See [`src/extensions-bridge/`](src/extensions-bridge/) for the full list and implementation details.

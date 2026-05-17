@@ -49,7 +49,7 @@
         return
       }
       if (raw.startsWith('/r')) { // old Roll20/Discord habit; nudge the user
-        OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
+        OBR.broadcast.sendMessage(API_CHANNEL, { md: 'Just type `2d6` etc — no `/r` needed.', title: 'Mimic Log&Chat', origin: 'com.friendlymimic.mimic-chat' }, { destination: 'LOCAL' })
         return
       }
       const title = data.title ?? await OBR.player.getName()

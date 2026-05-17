@@ -1,4 +1,4 @@
-export const DEFAULT_TITLE = 'Mimic log&chat'
+export const DEFAULT_TITLE = 'Mimic Log&Chat'
 export const DEFAULT_INTRO = 'You can drag any action to another place, try it with the icon above!'
 export const SETTINGS_KEY = 'com.friendlymimic.mimic-chat/settings'
 
