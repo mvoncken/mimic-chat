@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mimic Chat&amp;Log — About</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --surface: #16213e;
+      --border: #0f3460;
+      --accent: #7c5cbf;
+      --accent-light: #a07de0;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --code-bg: #0d1b2a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .page { max-width: 680px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; color: var(--accent-light); margin-bottom: .25rem; }
+    .tagline { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+    h2 { font-size: 1.1rem; font-weight: 700; color: var(--accent-light); text-transform: uppercase;
+         letter-spacing: .06em; margin: 2rem 0 .75rem; }
+    p { margin-bottom: .75rem; color: var(--text); }
+    ul { padding-left: 1.25rem; margin-bottom: .75rem; }
+    li { margin-bottom: .35rem; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: .88em;
+      font-family: monospace;
+      color: var(--accent-light);
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    pre code { background: none; border: none; padding: 0; color: var(--text); }
+    .install-url {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: .75rem 1rem;
+      font-family: monospace;
+      font-size: .95rem;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+      word-break: break-all;
+    }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: .9rem; }
+    th { text-align: left; color: var(--text-muted); font-weight: 600;
+         border-bottom: 1px solid var(--border); padding: .4rem .5rem; }
+    td { padding: .4rem .5rem; border-bottom: 1px solid var(--dim, #1e1e3a); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    a { color: var(--accent-light); }
+    .hint { color: var(--text-muted); font-size: .9rem; }
+    .footer { margin-top: 3rem; color: var(--text-dim); font-size: .85rem; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Mimic Chat&amp;Log</h1>
+  <p class="tagline">Shared chat and dice log for <a href="https://owlbear.rodeo">Owlbear Rodeo</a></p>
+
+  <h2>Install</h2>
+  <p>Open Owlbear Rodeo → Extensions → Add extension URL:</p>
+  <code class="install-url">https://mimiclog.friendlymimic.com/manifest.json</code>
+
+  <hr>
+
+  <h2>Publishing natively to Mimic Chat</h2>
+  <p>These tools post directly into the Mimic Chat log without any bridge:</p>
+  <ul>
+    <li><a href="https://owl20.uberdragon.org/">Owl20</a></li>
+    <li><a href="https://darklings-roller.friendlymimic.com/">ShadowDarklings Roller</a></li>
+  </ul>
+
+  <hr>
+
+  <h2>Dice bridges</h2>
+  <p>Mimic Chat automatically picks up roll events from these extensions — no setup needed:</p>
+  <ul>
+    <li><a href="https://www.owlbear.rodeo/extensions/rodeo.owlbear.dice">Owlbear Rodeo Dice</a></li>
+    <li>Battle System Bones</li>
+    <li>Battle System Friends</li>
+    <li>SD Character Sheet (by Max Paulus) — <em>requires 2+ players in the room</em></li>
+  </ul>
+
+  <hr>
+
+  <h2>Chat</h2>
+  <p>Type in the input at the bottom of the panel and press <code>Enter</code> to send. Everyone in the room sees your message instantly.</p>
+  <ul>
+    <li><strong>Shift+Enter</strong> — insert a line break (multiline message)</li>
+    <li><strong>Arrow Up / Down</strong> — cycle through your sent message history</li>
+    <li><strong>/h</strong> — show the quick-reference help card in your log</li>
+  </ul>
+
+  <h2>Dice</h2>
+  <p>Dice expressions are powered by <a href="https://github.com/BTMorton/dice_roller">dice-roller-parser</a> and support standard RPG notation.</p>
+  <ul>
+    <li><strong>Inline</strong> — wrap anywhere in your message: <code>[2d6]</code> <code>[1d20+4]</code> <code>[2d20kh1+5]</code></li>
+    <li><strong>Shortcut</strong> — type a bare expression with no spaces and it rolls immediately: <code>2d6</code> → <code>[2d6: 3+5] = <strong>8</strong></code></li>
+  </ul>
+
+  <h2>Markdown</h2>
+  <p>Messages support full CommonMark via <a href="https://marked.js.org">marked</a>.</p>
+  <table>
+    <tr><th>Syntax</th><th>Result</th></tr>
+    <tr><td><code>**bold**</code></td><td><strong>bold</strong></td></tr>
+    <tr><td><code>*italic*</code></td><td><em>italic</em></td></tr>
+    <tr><td><code>`code`</code></td><td><code>code</code></td></tr>
+    <tr><td><code># Heading</code></td><td>Heading (h1–h6 supported)</td></tr>
+    <tr><td><code>- item</code></td><td>Bullet list</td></tr>
+    <tr><td><code>[text](url)</code></td><td>Link</td></tr>
+    <tr><td><code>---</code></td><td>Horizontal rule</td></tr>
+  </table>
+
+  <h2>Images</h2>
+  <p>Paste a direct image URL ending in <code>.png</code> <code>.jpg</code> <code>.gif</code> <code>.webp</code> or <code>.svg</code> and it renders inline. Clicking opens the original in a new tab.</p>
+  <p class="hint">Standard Markdown image syntax <code>![alt](url)</code> also works.</p>
+
+  <h2>GM-only messages</h2>
+  <p>Messages flagged <code>gmOnly: true</code> are silently hidden from non-GM players. A shield icon marks them in the GM's log.</p>
+
+  <hr>
+
+  <h2>Developer API</h2>
+  <p>Any OBR extension can post into the Mimic Chat log using <code>OBR.broadcast.sendMessage</code>.</p>
+
+  <pre><code>OBR.broadcast.sendMessage(
+  'com.friendlymimic.mimic-chat/md',
+  {
+    md:     'The dungeon **rumbles**...',
+    title:  'Dungeon Master',
+    origin: 'com.yourext.yourext',
+    gmOnly: false,        // optional
+    id:     'unique-id',  // optional dedup key
+  },
+  { destination: 'ALL' }
+)</code></pre>
+
+  <p>See <a href="https://github.com/mvoncken/mimic-chat/blob/main/API-README.md">API-README.md</a> for the full channel reference including HTML, local-macro, and auto player-name channels.</p>
+
+  <div class="footer">Mimic Chat · <a href="https://mimiclog.friendlymimic.com">mimiclog.friendlymimic.com</a></div>
+</div>
+</body>
+</html>

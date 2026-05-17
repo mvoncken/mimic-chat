@@ -61,7 +61,7 @@ OBR.broadcast.sendMessage(
 
 ### Markdown support
 
-Standard CommonMark plus **bold**, *italic*, `code`, lists, and links. Line breaks are enabled by default.
+Full CommonMark block and inline rendering via [marked](https://marked.js.org) with `breaks: true`. Supported: headings (`#`–`######`), **bold**, *italic*, `code`, code blocks, lists, links, and horizontal rules. Heading sizes are scaled down to fit the chat context.
 
 
 ---

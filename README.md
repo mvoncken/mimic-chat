@@ -1,17 +1,24 @@
-# Mimic Chat
+# Mimic Chat&Log
 
-A chat extension for [Owlbear Rodeo](https://owlbear.rodeo).
+A chat and dice log extension for [Owlbear Rodeo](https://owlbear.rodeo).
 
 ## Why it exists
 
-Owlbear Rodeo has no built-in persistent chat. When players want to communicate, they have to use a separate Discord, a phone, or shout across the table. Mimic Chat fills that gap: a dedicated chat window that lives inside your OBR session, visible to everyone at the table, without leaving the game interface.
+Owlbear Rodeo has no built-in persistent chat. Mimic Chat&Log fills that gap: a shared log that lives inside your OBR session, visible to everyone at the table, without leaving the game interface.
 
 ## Features
 
-- **Plain-text room chat** — type a message, everyone in the session sees it instantly
-- **Dice roll feed** — roll events from [ShadowDarklings Roller](https://darklings-roller.friendlymimic.com) appear in the same log, so nothing is missed
-- **Chronological order** — messages appear oldest-at-top, newest-at-bottom, auto-scrolling to the latest entry (like every chat app you've ever used)
+- **Room chat** — type a message, everyone sees it instantly
+- **Inline dice** — wrap any expression in `[…]`: `[2d6]` `[1d20+4]` `[2d20kh1]`; or just type a bare expression like `2d6` on its own line
+- **Full Markdown** — bold, italic, code, headings, lists, links
+- **Images** — paste a direct image URL and it renders inline
+- **Multiline input** — Shift+Enter for a new line; Enter sends
+- **Input history** — Arrow Up/Down to cycle through previous messages
+- **GM-only messages** — entries flagged `gmOnly` are invisible to players
+- **Native publishers** — [Owl20](https://owl20.uberdragon.org/) and [ShadowDarklings Roller](https://darklings-roller.friendlymimic.com/) post directly into the log
+- **Dice bridges** — roll events from Owlbear Rodeo Dice, Battle System Bones/Friends, and SD Character Sheet appear automatically
 - **Dark and light theme** — follows the OBR theme setting automatically
+- **Open API** — any OBR extension can post into the log; see [API-README.md](API-README.md)
 
 ## Installation
 
@@ -21,7 +28,6 @@ Add this URL as an extension in Owlbear Rodeo:
 https://mimiclog.friendlymimic.com/manifest.json
 ```
 
-## Planned
+## Quick reference
 
-- Multiple event sources (other OBR extensions can push entries into the log)
-- Timestamps
+Type `/h` in the chat input for an in-app help summary.

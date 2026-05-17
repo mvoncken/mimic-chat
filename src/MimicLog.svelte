@@ -45,7 +45,7 @@
       let raw = data.md ?? ''
       if (raw === '/h') {
         OBR.broadcast.sendMessage(API_CHANNEL, { title: 'Mimic help', origin: 'com.friendlymimic.mimic-chat', md:
-`**Dice inline** — wrap anywhere in text: \`[2d6]\` \`[2d6+3]\` \`[fire: 1d6]\`\n**Dice shortcut** — line starting with a number, no spaces: \`2d6\` → rolls immediately\n**Markdown** — \`**bold**\` \`*italic*\` \`\`code\`\`\` \`# Heading\`\n**Multiline** — Shift+Enter\n**History** — Arrow Up / Down` }, { destination: 'LOCAL' })
+`---\n**Dice inline** — wrap in \`[]\`: \`[2d6]\` \`[2d6+3]\` \`[2d20kh1+5]\`\n**Dice shortcut** — line starting with a number, no spaces: \`2d6\` → rolls immediately\n**Markdown** — \`**bold**\` \`*italic*\` \`\`code\`\`\` \`# Heading\`\n**Images** — paste a direct image URL (png/jpg/gif/webp/svg)\n**Multiline** — Shift+Enter\n**History** — Arrow Up / Down\n<a href="/about.html" target="_blank" rel="noopener noreferrer">Full documentation</a>\n---` }, { destination: 'LOCAL' })
         return
       }
       if (raw.startsWith('/r')) { // old Roll20/Discord habit; nudge the user
