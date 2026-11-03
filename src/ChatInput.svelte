@@ -1,6 +1,7 @@
 <script>
   import OBR from '@owlbear-rodeo/sdk'
   import { LOCAL_MACRO_CHANNEL } from './channels.js'
+  import { findMacro, runMacro } from './macros.svelte.js'
 
   let text = $state('')
   let textarea
@@ -16,6 +17,8 @@
     draft = ''
     text = ''
     resize()
+    const macro = raw.match(/^\/(\S+)$/) && findMacro(raw.slice(1))
+    if (macro) return runMacro(macro.body)
     if (OBR.isAvailable) {
       OBR.broadcast.sendMessage(LOCAL_MACRO_CHANNEL, { md: raw }, { destination: 'LOCAL' })
     }

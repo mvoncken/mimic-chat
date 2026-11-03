@@ -1,4 +1,4 @@
-# Mimic Log&Chat
+# Mimic dice chat
 
 A chat and dice log extension for [Owlbear Rodeo](https://owlbear.rodeo).
 
@@ -6,7 +6,7 @@ A chat and dice log extension for [Owlbear Rodeo](https://owlbear.rodeo).
 
 Roll20 and Foundry have a built-in chat panel that extensions publish dice rolls and events to. Owlbear Rodeo has no equivalent.
 
-Mimic Log&Chat fills that gap — primarily as a **dice log**, secondarily as a chat. Your default dice rolls will appear here automatically.
+Mimic dice chat fills that gap — primarily as a **dice log**, secondarily as a chat. Your default dice rolls will appear here automatically.
 
 ## Features
 
