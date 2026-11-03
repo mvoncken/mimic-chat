@@ -140,10 +140,28 @@ body {
     color: var(--secondary-main);
 }
 
-.log-entry .sender {
+.sender-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background-color: var(--background-paper);
+}
+.sender-bar:first-child { margin-top: 0; }
+
+.sender-bar .sender {
     font-weight: 600;
     color: var(--primary-main);
-    margin-right: 4px;
+}
+
+.player-dot {
+    flex: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-primary);
 }
 
 .log-entry .text {

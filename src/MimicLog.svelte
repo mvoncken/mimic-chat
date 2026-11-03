@@ -7,6 +7,8 @@
   import { marked } from 'marked'
   import DOMPurify from 'dompurify'
   import { settings } from './settings.svelte.js'
+  import { loadHistory, saveToHistory } from './history.js'
+  import { subscribePlayers, colorOf } from './players.js'
 
   marked.use({ breaks: true })
 
@@ -26,11 +28,16 @@
   function push(entry, id) {
     if (id) { if (seen.has(id)) return; seen.add(id) }
     entries = [...entries.slice(-(MAX - 1)), entry]
+    saveToHistory(entry)
     if (OBR.isAvailable) {
       OBR.action.setIcon('/action-icon-notify.svg')
       setTimeout(() => OBR.action.setIcon('/action-icon.svg'), 500)
     }
   }
+
+  // show the sender bar only when the sender changes, like owl20
+  const groupKey = (e) => e && e.type !== 'info' ? `${e.gmOnly}|${e.sender}|${e.color}` : null
+  const isFirst = (i) => groupKey(entries[i]) !== groupKey(entries[i - 1])
 
   // entries.length read creates the reactive dependency; tick() waits for DOM update
   $effect(() => { entries.length; tick().then(() => scrollEl && (scrollEl.scrollTop = scrollEl.scrollHeight)) })
@@ -39,11 +46,12 @@
     if (!OBR.isAvailable) return
     await new Promise(resolve => OBR.onReady(resolve))
     const role = await OBR.player.getRole()
+    entries = [...entries, ...loadHistory()]
 
-    const unsubs = []
-    unsubs.push(OBR.broadcast.onMessage(API_CHANNEL, ({ data }) => {
+    const unsubs = [await subscribePlayers()]
+    unsubs.push(OBR.broadcast.onMessage(API_CHANNEL, ({ data, connectionId }) => {
       if (data.gmOnly && role !== 'GM') return
-      if (data.md) push({ type: 'md', sender: data.title ?? null, text: data.md, gmOnly: !!data.gmOnly }, data.id)
+      if (data.md) push({ type: 'md', sender: data.title ?? null, color: colorOf(connectionId), text: data.md, gmOnly: !!data.gmOnly }, data.id)
     }))
 
     // LOCAL_MACRO_CHANNEL: resolve dice macros locally, then re-broadcast on API_CHANNEL ::see API-README.md
@@ -68,9 +76,9 @@
       OBR.broadcast.sendMessage(API_CHANNEL, { ...data, title }, { destination: 'ALL' })
     }))
 
-    unsubs.push(OBR.broadcast.onMessage(HTML_CHANNEL, ({ data }) => {
+    unsubs.push(OBR.broadcast.onMessage(HTML_CHANNEL, ({ data, connectionId }) => {
       if (data.gmOnly && role !== 'GM') return
-      push({ type: 'html', sender: data.title ?? null, text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null, gmOnly: !!data.gmOnly }, data.id)
+      push({ type: 'html', sender: data.title ?? null, color: colorOf(connectionId), text: DOMPurify.sanitize(data.html ?? ''), originClass: (data.origin ?? '').split('.').at(-1) || null, gmOnly: !!data.gmOnly }, data.id)
     }))
 
     unsubs.push(await subscribeCustomSources())
@@ -80,19 +88,24 @@
 
 <div class="mimic-log" bind:this={scrollEl}>
   {#each entries as entry, i (i)}
+    {#if entry.type !== 'info' && isFirst(i) && (entry.sender || entry.color || entry.gmOnly)}
+      <div class="sender-bar">
+        {#if entry.color}<span class="player-dot" style="background-color:{entry.color}"></span>{/if}
+        {#if entry.gmOnly}
+          <span class="gm-only-wrap" title="GM only">
+            <svg class="gm-only-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+          </span>
+        {/if}
+        {#if entry.sender}<span class="sender">{entry.sender}</span>{/if}
+      </div>
+    {/if}
     <div class="log-entry type-{entry.type}">
-      {#if entry.gmOnly}
-        <span class="gm-only-wrap" title="GM only">
-          <svg class="gm-only-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-          </svg>
-        </span>
-      {/if}
       {#if entry.type === 'html'}
-        {#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}
         <div class="html-entry {entry.originClass}"><span class="text">{@html entry.text}</span></div>
       {:else}
-        <div class="text markdown">{#if entry.sender}<span class="sender">{entry.sender}:</span>{/if}{@html renderMd(entry.text)}</div>
+        <div class="text markdown">{@html renderMd(entry.text)}</div>
       {/if}
     </div>
   {/each}
