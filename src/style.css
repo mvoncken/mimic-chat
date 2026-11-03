@@ -168,7 +168,7 @@ body {
     color: var(--text-primary);
 }
 
-.log-entry img {
+.log-entry .markdown img {
     width: 100%;
     border-radius: 4px;
     display: block;

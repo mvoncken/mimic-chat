@@ -3,6 +3,10 @@ Legacy compatibility
 Some warts are worth it.
 */
 
+.ct-beyond20-custom-icon {
+    display:none;
+}
+
 .beyond20-button-roll-damages { display: none !important; }
 .owl20 {
     --primary-main: #bb99ff;
