@@ -11,7 +11,7 @@ export function formatRoll(roll, values) {
   const counts = {}
   for (const d of allDice) counts[d.type] = (counts[d.type] ?? 0) + 1
   const label = Object.entries(counts).map(([t, n]) => `${n}${t}`).join('+')
-  return `${label}: [${vals.join(', ')}] = **${total}**`
+  return `${label}: [${vals.join(', ')}] ➜ **${total}**`
 }
 
 export function processRoll(roll, values) {
