@@ -7,7 +7,8 @@ export function processDice(msg) {
   return msg.replace(/\[([^\]]{1,40})\]/g, (match, inner) => {
     try {
       const result = roller.roll(inner.trim())
-      const rendered = renderer.render(result)
+      // Collapse single-die groups: "(11 = 11) + 7" -> "11 + 7" (keeps crit/fail markers)
+      const rendered = renderer.render(result).replace(/\(([*~]*-?\d+[*~]*) = -?\d+\)/g, '$1')
       const eqIdx = rendered.lastIndexOf(' = ')
       const rolls = eqIdx !== -1 ? rendered.slice(0, eqIdx) : rendered
       const total = eqIdx !== -1 ? rendered.slice(eqIdx + 3) : result.value
