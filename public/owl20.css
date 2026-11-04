@@ -40,6 +40,22 @@ Some warts are worth it.
     list-style: disc outside;
     margin: 3px 0 0 1.1em;
 }
+
+/* stat block name + "Medium monstrosity" line, see formatStatblock in owl20-owlbear */
+.beyond20-description .owl20-name {
+    font-weight: bold;
+    font-variant: small-caps;
+    font-size: 1.15em;
+    color: var(--primary-main);
+    border-top: 1px solid var(--primary-dark);
+    margin-top: 8px;
+    padding-top: 4px;
+}
+
+.beyond20-description .owl20-type {
+    font-style: italic;
+    margin-bottom: 2px;
+}
 .owl20 {
     --primary-main: #bb99ff;
     --primary-light: rgb(200, 173, 255);
