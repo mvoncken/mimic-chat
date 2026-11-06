@@ -4,11 +4,11 @@
   "manifest_version": 1,
   "homepage_url": "https://mimiclog.friendlymimic.com",
   "icon": "/icon.svg",
-  "description": "Plain-text chat for your table. Also shows dice rolls from ShadowDarklings Roller.",
+  "description": "Shared chat and dice log for your table. Shows rolls from Owl20, Dice Roller and more.",
   "action": {
     "title": "Mimic dice chat",
     "icon": "/action-icon.svg",
-    "popover": "/index.html",
+    "popover": "/app.html",
     "height": 450,
     "width": 350
   }

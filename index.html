@@ -4,11 +4,114 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mimic dice chat</title>
-  <link rel="stylesheet" href="/owl20.css" />
+  <meta name="description" content="Shared chat and dice log for Owlbear Rodeo." />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --surface: #16213e;
+      --border: #0f3460;
+      --accent: #7c5cbf;
+      --accent-light: #a07de0;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-dim: #555;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .page { max-width: 560px; width: 100%; text-align: center; }
+    .logo { width: 72px; height: 72px; margin-bottom: 1rem; }
+    h1 { font-size: 2rem; color: var(--accent-light); margin-bottom: .25rem; }
+    .tagline { color: var(--text-muted); margin-bottom: 2rem; }
+    .install-label { font-size: .9rem; color: var(--text-muted); margin-bottom: .5rem; }
+    .install {
+      display: flex;
+      gap: .5rem;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: .5rem .5rem .5rem 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+    .install code {
+      flex: 1;
+      font-family: monospace;
+      font-size: .95rem;
+      color: var(--accent-light);
+      text-align: left;
+      word-break: break-all;
+    }
+    .install button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: .4rem .8rem;
+      font: inherit;
+      font-size: .85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .install button:hover { background: var(--accent-light); }
+    ul { list-style: none; text-align: left; margin: 0 auto 2rem; max-width: 420px; }
+    li { padding: .3rem 0; border-bottom: 1px solid var(--border); }
+    li:last-child { border-bottom: none; }
+    .links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    a { color: var(--accent-light); }
+    .footer { margin-top: 3rem; color: var(--text-dim); font-size: .85rem; }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script src="https://ext.friendlymimic.com/scripts/obr.js?extid=mimiclog"></script>
-  <script type="module" src="/src/main.js"></script>
+<main class="page">
+  <img class="logo" src="/icon.svg" alt="" />
+  <h1>Mimic dice chat</h1>
+  <p class="tagline">Shared chat and dice log for <a href="https://owlbear.rodeo">Owlbear Rodeo</a></p>
+
+  <p class="install-label">Owlbear Rodeo → Extensions → Add extension URL</p>
+  <div class="install">
+    <code id="manifest-url">https://mimiclog.friendlymimic.com/manifest.json</code>
+    <button type="button" id="copy">Copy</button>
+  </div>
+
+  <ul>
+    <li>🎲 Dice rolls from Owl20, Owlbear Rodeo Dice, Bones and more</li>
+    <li>💬 Room chat with Markdown and images</li>
+    <li>⚡ Inline dice: <code>[1d20+4]</code> or just <code>2d6</code></li>
+    <li>🔌 Open API for other extensions</li>
+  </ul>
+
+  <nav class="links">
+    <a href="/about.html">Documentation</a>
+    <a href="https://github.com/mvoncken/mimic-chat/blob/main/API-README.md">Developer API</a>
+    <a href="https://github.com/mvoncken/mimic-chat">GitHub</a>
+  </nav>
+
+  <p class="footer">Mimic dice chat · a friendlymimic extension</p>
+</main>
+<script>
+  const url = location.origin + '/manifest.json'
+  document.getElementById('manifest-url').textContent = url
+  const btn = document.getElementById('copy')
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(url)
+      btn.textContent = 'Copied!'
+    } catch {
+      btn.textContent = 'Copy failed'
+    }
+    setTimeout(() => { btn.textContent = 'Copy' }, 1500)
+  })
+</script>
 </body>
 </html>

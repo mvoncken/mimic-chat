@@ -15,6 +15,12 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, 'index.html'),
+        app: path.resolve(__dirname, 'app.html'),
+      },
+    },
   },
   plugins: [
     svelte(),
