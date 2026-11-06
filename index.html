@@ -64,9 +64,11 @@
       white-space: nowrap;
     }
     .install button:hover { background: var(--accent-light); }
-    ul { list-style: none; text-align: left; margin: 0 auto 2rem; max-width: 420px; }
-    li { padding: .3rem 0; border-bottom: 1px solid var(--border); }
-    li:last-child { border-bottom: none; }
+    .why { text-align: left; margin: 0 auto 2rem; max-width: 420px; }
+    .why h2 { font-size: 1rem; color: var(--accent-light); margin-bottom: .5rem; }
+    .why p { margin-bottom: .5rem; }
+    ul { text-align: left; margin: 0 auto 2rem; max-width: 420px; padding-left: 1.25rem; }
+    li { padding: .15rem 0; }
     .links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
     a { color: var(--accent-light); }
     .footer { margin-top: 3rem; color: var(--text-dim); font-size: .85rem; }
@@ -84,11 +86,17 @@
     <button type="button" id="copy">Copy</button>
   </div>
 
+  <section class="why">
+    <h2>Why it exists</h2>
+    <p>Roll20 and Foundry have a built-in chat panel that extensions publish dice rolls and events to. Owlbear Rodeo has no equivalent.</p>
+    <p>Mimic dice chat fills that gap: primarily a <strong>dice log</strong>, secondarily a chat. Your dice rolls appear here automatically.</p>
+  </section>
+
   <ul>
-    <li>🎲 Dice rolls from Owl20, Owlbear Rodeo Dice, Bones and more</li>
-    <li>💬 Room chat with Markdown and images</li>
-    <li>⚡ Inline dice: <code>[1d20+4]</code> or just <code>2d6</code></li>
-    <li>🔌 Open API for other extensions</li>
+    <li>Dice rolls from Owl20, Owlbear Rodeo Dice, Bones and more</li>
+    <li>Room chat with Markdown and images</li>
+    <li>Inline dice: <code>[1d20+4]</code> or just <code>2d6</code></li>
+    <li>Open API for other extensions</li>
   </ul>
 
   <nav class="links">
