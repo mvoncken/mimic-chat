@@ -1,6 +1,8 @@
 /*
 Legacy compatibility
 Some warts are worth it.
+
+NOTE: mimic-chat overrides of the owl20-owlbear styles are at the bottom of this file.
 */
 
 .ct-beyond20-custom-icon {
@@ -96,9 +98,6 @@ Some warts are worth it.
     & .beyond20-header {
         display: flex;
         flex-direction: row;
-    }
-    & .beyond20-header .beyond20-character-avatar {
-       display:none;
     }
 
     & .beyond20-message details {
@@ -357,4 +356,21 @@ Some warts are worth it.
 }
 .owl20-abilities-2024 > div:nth-child(-n+7) {
     font-weight: bold;
+}
+
+/* ===== mimic-chat overrides (keep at the bottom so they win) ===== */
+/* Override: use the default font and size for titles instead of Modesto Condensed 20px */
+.owl20 {
+    & .beyond20-message details summary,
+    & .beyond20-title {
+        font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+    }
+}
+
+/* Override: hide the character avatar in the message header (owl20-owlbear shows it) */
+.owl20 {
+    & .beyond20-header .beyond20-character-avatar {
+        display: none;
+    }
 }
