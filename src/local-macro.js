@@ -12,7 +12,7 @@ export function processDice(msg) {
       const eqIdx = rendered.lastIndexOf(' = ')
       const rolls = eqIdx !== -1 ? rendered.slice(0, eqIdx) : rendered
       const total = eqIdx !== -1 ? rendered.slice(eqIdx + 3) : result.value
-      return `[${inner.trim()}: ${rolls}] ➜ **${total}**`
+      return `\`${inner.trim()}\`: [${rolls}] ➜ **${total}**`
     } catch {
       return match
     }

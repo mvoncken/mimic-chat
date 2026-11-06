@@ -29,7 +29,7 @@ export function formatRoll(roll, values) {
   const counts = {}
   for (const r of results) counts[r.type] = (counts[r.type] ?? 0) + 1
   const label = Object.entries(counts).map(([t, n]) => `${n}${t}`).join('+')
-  return `${label}: [${vals.join(', ')}] ➜ **${total}**`
+  return `\`${label}\`: [${vals.join(', ')}] ➜ **${total}**`
 }
 
 export function processRoll(roll, values) {
