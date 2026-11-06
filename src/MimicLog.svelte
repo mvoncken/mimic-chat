@@ -25,14 +25,20 @@
   let entries = $state([{ type: 'info', text: settings.introText || defaultIntro }])
   let scrollEl = $state(null)
 
+  // show the notify icon for 1s; a new message restarts the timer
+  let iconTimer = null
+  function flashIcon() {
+    if (!OBR.isAvailable) return
+    clearTimeout(iconTimer)
+    OBR.action.setIcon('/action-icon-notify.svg')
+    iconTimer = setTimeout(() => OBR.action.setIcon('/action-icon.svg'), 1000)
+  }
+
   function push(entry, id) {
     if (id) { if (seen.has(id)) return; seen.add(id) }
     entries = [...entries.slice(-(MAX - 1)), entry]
     saveToHistory(entry)
-    if (OBR.isAvailable) {
-      OBR.action.setIcon('/action-icon-notify.svg')
-      setTimeout(() => OBR.action.setIcon('/action-icon.svg'), 500)
-    }
+    flashIcon()
   }
 
   // show the sender bar only when the sender changes, like owl20
