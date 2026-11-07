@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process'
 
-const SITE = 'https://mimiclog.friendlymimic.com'
+const SITE = 'https://mimic-chat.friendlymimic.com'
 
 async function getVersion() {
   const res = await fetch(`${SITE}/manifest.json?t=${Date.now()}`)

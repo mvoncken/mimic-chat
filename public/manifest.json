@@ -2,7 +2,7 @@
   "name": "Mimic dice chat",
   "version": "0.1.0",
   "manifest_version": 1,
-  "homepage_url": "https://mimiclog.friendlymimic.com",
+  "homepage_url": "https://mimic-chat.friendlymimic.com",
   "icon": "/icon.svg",
   "description": "Shared chat and dice log for your table. Shows rolls from Owl20, Dice Roller and more.",
   "action": {

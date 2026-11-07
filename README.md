@@ -27,7 +27,7 @@ Mimic dice chat fills that gap — primarily as a **dice log**, secondarily as a
 Add this URL as an extension in Owlbear Rodeo:
 
 ```
-https://mimiclog.friendlymimic.com/manifest.json
+https://mimic-chat.friendlymimic.com/manifest.json
 ```
 
 ## Quick reference
@@ -36,6 +36,6 @@ Type `/h` in the chat input for an in-app help summary.
 
 ## Links
 
-- [About / documentation](https://mimiclog.friendlymimic.com/about.html)
+- [About / documentation](https://mimic-chat.friendlymimic.com/about.html)
 - [GitHub](https://github.com/mvoncken/mimic-chat)
 - [Developer API](API-README.md)
