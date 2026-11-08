@@ -18,7 +18,7 @@ Mimic dice chat fills that gap — primarily as a **dice log**, secondarily as a
 - **Input history** — Arrow Up/Down to cycle through previous messages
 - **GM-only messages** — entries flagged `gmOnly` are invisible to players
 - **Native publishers** — [Owl20](https://owl20.uberdragon.org/) and [ShadowDarklings Roller](https://darklings-roller.friendlymimic.com/) post directly into the log
-- **Dice bridges** — roll events from Owlbear Rodeo Dice, Battle System Bones/Friends, and SD Character Sheet appear automatically
+- **Dice bridges** — roll events from Owlbear Rodeo Dice and Battle System Bones/Friends appear automatically
 - **Dark and light theme** — follows the OBR theme setting automatically
 - **Open API** — any OBR extension can post into the log; see [API-README.md](API-README.md)
 
